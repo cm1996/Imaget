@@ -161,8 +161,9 @@ public class Imaget {
         realLoad(mUrl, 0, 0, onLoadListener);
     }
 
-    public Bitmap loadSync(String url, int requiredWidth, int requiredHeight) {
+    public Bitmap loadSync(int requiredWidth, int requiredHeight) {
         Bitmap bitmap = null;
+        String url = mUrl;
         if((bitmap = loadFromLru(url))!=null) {
             Log.d(TAG, "loadFromLru: "+url);
             return bitmap;
