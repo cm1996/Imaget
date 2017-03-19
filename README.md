@@ -13,6 +13,7 @@
 - 针对列表的图片错位问题，本工具内置了设置 tag 的解决方案，可能与使用者代码冲突
 ### 异步
 - Imaget.url(x).load(x);
+
         Imaget.url(url).Load(url, requiredWidth, requiredHeight, new OnLoadListener() {
             @Override
             public void onSuccess(Bitmap bitmap) {}
@@ -20,9 +21,10 @@
             public void onFail() {}
         });
 - Imaget.url(x).bind(x);
+
         Imaget.url(url).bind(imageView);
 ### 同步
-        Imaget.url(url).loadSync(width,height);
+    Imaget.url(url).loadSync(width,height);
 
 ## 错误及维护
 欢迎使用该项目的开发者。本人水平有限。如果有什么错误，或者其他任何想法（包括版权问题），欢迎和我联系：chenmo1996@outlook.com
