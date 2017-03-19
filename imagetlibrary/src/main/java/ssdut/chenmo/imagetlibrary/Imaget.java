@@ -1,4 +1,4 @@
-package ssdut.chenmo.imagetlibrary;
+﻿package ssdut.chenmo.imagetlibrary;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -80,7 +80,7 @@ public class Imaget {
 
     public static void on(Context context) {
 
-        mContext = context.getApplicationContext();;
+        mContext = context.getApplicationContext();
         if(!isWorking) {
             mInstance = new Imaget();
             /** 初始化内存缓存 */
