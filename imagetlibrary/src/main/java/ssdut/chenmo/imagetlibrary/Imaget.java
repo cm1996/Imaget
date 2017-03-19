@@ -46,7 +46,7 @@ public class Imaget {
 
 
     /** 工具控制与使用相关 */
-    private Bitmap currentBitmap;
+    private BitmapDecor mBitmapDecor;
     private static Imaget mInstance;
     private static String mUrl;
     private static boolean isWorking = false;
@@ -153,6 +153,10 @@ public class Imaget {
         }
     }
 
+    public void setBitmapDecor(BitmapDecor bitmapDecor) {
+        mBitmapDecor = bitmapDecor;
+    }
+
     public void load(OnLoadListener onLoadListener) {
         load(onLoadListener, 0, 0);
     }
@@ -166,15 +170,25 @@ public class Imaget {
         String url = mUrl;
         if((bitmap = loadFromLru(url))!=null) {
             Log.d(TAG, "loadFromLru: "+url);
+            if(mBitmapDecor != null) {
+                bitmap = mBitmapDecor.decor(bitmap);
+            }
             return bitmap;
         }
         if(mDiskLruCache != null) {
             if((bitmap = loadFromDiskLru(url,requiredWidth,requiredHeight))!=null) {
                 Log.d(TAG, "loadFromDickLru: "+url);
+                if(mBitmapDecor != null) {
+                    bitmap = mBitmapDecor.decor(bitmap);
+                }
                 return bitmap;
             }
         }
-        return loadFromNetwork(url,requiredWidth,requiredHeight);
+        bitmap = loadFromNetwork(url,requiredWidth,requiredHeight);
+        if(mBitmapDecor != null) {
+            bitmap = mBitmapDecor.decor(bitmap);
+        }
+        return bitmap;
     }
 
     public void bind(ImageView imageView) {
@@ -216,6 +230,9 @@ public class Imaget {
                 if((bitmap = loadFromLru(url))!=null) {
                     Log.d(TAG, "loadFromLru: "+url);
                     message.what = LRU_LOAD_SUCCESS;
+                    if(mBitmapDecor != null) {
+                        bitmap = mBitmapDecor.decor(bitmap);
+                    }
                     requestBean.bitmap = bitmap;
                     mHandler.sendMessage(message);
                     return;
@@ -224,6 +241,9 @@ public class Imaget {
                     if((bitmap = loadFromDiskLru(url,requiredWidth,requiredHeight))!=null) {
                         Log.d(TAG, "loadFromDickLru: "+url);
                         message.what = DLRU_LOAD_SUCCESS;
+                        if(mBitmapDecor != null) {
+                            bitmap = mBitmapDecor.decor(bitmap);
+                        }
                         requestBean.bitmap = bitmap;
                         mHandler.sendMessage(message);
                         return;
@@ -232,6 +252,9 @@ public class Imaget {
                 if((bitmap = loadFromNetwork(url,requiredWidth,requiredHeight))!=null) {
                     Log.d(TAG, "loadFromNetwork: "+url);
                     message.what = NET_LOAD_SUCCESS;
+                    if(mBitmapDecor != null) {
+                        bitmap = mBitmapDecor.decor(bitmap);
+                    }
                     requestBean.bitmap = bitmap;
                     mHandler.sendMessage(message);
                     return;
@@ -408,6 +431,10 @@ public class Imaget {
     public interface OnLoadListener {
         void onSuccess(Bitmap bitmap);
         void onFail();
+    }
+
+    public interface BitmapDecor {
+        Bitmap decor(Bitmap bitmap);
     }
 
     private class RequestBean {
