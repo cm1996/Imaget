@@ -153,8 +153,9 @@ public class Imaget {
         }
     }
 
-    public void setBitmapDecor(BitmapDecor bitmapDecor) {
+    public Imaget setBitmapDecor(BitmapDecor bitmapDecor) {
         mBitmapDecor = bitmapDecor;
+        return mInstance;
     }
 
     public void load(OnLoadListener onLoadListener) {
