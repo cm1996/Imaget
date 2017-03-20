@@ -4,7 +4,7 @@
 ## 设计思路来源，尊重开源成果
 - 本工具在设计上参考了网上的开源图片加载框架
 - 缓存和压缩上参考任玉刚老师的著作《 Android 开发艺术探索》
-- 磁盘缓存使用了 Android 官方文档推荐的[DiskLruCache](android.googlesource.com/platform/libcore/+/jb-mr2-release/luni/src/main/java/libcore/io/DiskLruCache.java), 真正使用的源文件由 CSDN 的郭霖老师提供。
+- 磁盘缓存使用了 Android 官方文档推荐的 [DiskLruCache](https://android.googlesource.com/platform/libcore/+/jb-mr2-release/luni/src/main/java/libcore/io/DiskLruCache.java), 真正使用的源文件由 CSDN 的郭霖老师提供。
 ## 使用
 - 最低 API 14
 - 仅工作在 UI 线程
