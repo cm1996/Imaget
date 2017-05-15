@@ -51,6 +51,7 @@ public class Imaget {
     private static String mUrl;
     private static boolean isWorking = false;
     private static long DISK_CACHE_SIZE = 30 * 1024 * 1024;
+    private static long MEMORY_CACHE_SIZE = (Runtime.getRuntime().maxMemory())/1024/8;
 
     /** 一些常量 */
     private static final int LOAD_FAIL= 1000;
@@ -60,10 +61,47 @@ public class Imaget {
 
 
     /** 线程池相关参数 依照AsyncTask配置 */
-    private int CPU_COUNT = Runtime.getRuntime().availableProcessors();
-    private int CORE_POOL_SIZE = CPU_COUNT + 1;
-    private int MAXIMUM_POOL_SIZE = CPU_COUNT * 2 + 1;
-    private int KEEP_ALIVE = 5;
+    private static int CPU_COUNT = Runtime.getRuntime().availableProcessors();
+    private static int CORE_POOL_SIZE = CPU_COUNT + 1;
+    private static int MAXIMUM_POOL_SIZE = CPU_COUNT * 2 + 1;
+    private static int KEEP_ALIVE = 5;
+
+    /** builder */
+    private static Builder sBuilder = new Builder();
+
+    public static void useDefault() {
+        DISK_CACHE_SIZE = 30 * 1024 * 1024;
+        MEMORY_CACHE_SIZE = (Runtime.getRuntime().maxMemory())/1024/8;
+        CORE_POOL_SIZE = CPU_COUNT + 1;
+        MAXIMUM_POOL_SIZE = CPU_COUNT * 2 + 1;
+        KEEP_ALIVE = 5;
+    }
+
+    public static Builder getBuilder() {
+        return sBuilder;
+    }
+
+    private static class Builder {
+        public Builder setDiskCacheSize(long size) {
+            DISK_CACHE_SIZE = size;
+            return this;
+        }
+
+        public Builder setMemoryCacheSize(long size) {
+            MEMORY_CACHE_SIZE = size;
+            return this;
+        }
+
+        public Builder setCoreThreadSize(int size) {
+            CORE_POOL_SIZE = size;
+            return this;
+        }
+
+        public Builder setMaxThreadSize(int size) {
+            MAXIMUM_POOL_SIZE = size;
+            return this;
+        }
+    }
 
     private final ThreadFactory mThreadFactory = new ThreadFactory() {
         private final AtomicInteger mCount = new AtomicInteger(1);
@@ -85,7 +123,7 @@ public class Imaget {
             mInstance = new Imaget();
             /** 初始化内存缓存 */
             mInstance.mLruCache = new LruCache<String, Bitmap>
-                    ((int)(Runtime.getRuntime().maxMemory())/1024/8) {
+                    ((int)MEMORY_CACHE_SIZE) {
                 @Override
                 protected int sizeOf(String key, Bitmap value) {
                     return value.getRowBytes()*value.getHeight()/1024;
